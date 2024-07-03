@@ -19,13 +19,52 @@ sources:
 models:
   - name: stg_provider1
     description: "Staging model for provider1 data"
-    # columns:
-    #   - name: id
-    #     description: "Primary key"
-    #     tests:
-    #       - unique
-    #       - not_null
+    columns:
+      - name: provider_id
+        tests:
+          - unique
+          - not_null
+      - name: player_name
+        tests:
+          - not_null
+      - name: gender
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Male', 'Female','M','F']
+
+  - name: stg_provider2
+    description: "Staging model for provider2 data"
+    columns:
+      - name: provider_id
+        tests:
+          - unique
+          - not_null
+      - name: player_name
+        tests:
+          - not_null
+      - name: gender
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Male', 'Female','M','F']
+
+  - name: stg_provider3
+    description: "Staging model for provider3 data"
+    columns:
+      - name: provider_id
+        tests:
+          - unique
+          - not_null
+      - name: player_name
+        tests:
+          - not_null
+      - name: gender
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Male', 'Female','M','F']
 
   - name: fct_player_id
-    description: "Test"
+    description: "global player_id table which helps in unique dentification"
       
