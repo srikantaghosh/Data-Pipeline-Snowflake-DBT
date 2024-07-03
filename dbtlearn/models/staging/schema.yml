@@ -1,0 +1,23 @@
+version: 2
+
+# Define a source
+sources:
+  - name: soccer
+    schema: raw
+    tables:
+      - name: provider1_raw
+      - name: provider2_raw
+      - name: provider3_raw
+        
+
+# Define models
+models:
+  - name: stg_provider1
+    description: "Staging model for provider1 data"
+    # columns:
+    #   - name: id
+    #     description: "Primary key"
+    #     tests:
+    #       - unique
+    #       - not_null
+      
