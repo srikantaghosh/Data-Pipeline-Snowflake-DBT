@@ -32,4 +32,9 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   dbtlearn:
+    staging:
+      +materialized: view  # Default materialization for models in the staging directory
+    transformation:
+      +materialized: table  # Default materialization for models in the transformation directory
+
 
