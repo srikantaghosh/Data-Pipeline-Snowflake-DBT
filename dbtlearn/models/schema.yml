@@ -8,7 +8,12 @@ sources:
       - name: provider1_raw
       - name: provider2_raw
       - name: provider3_raw
-        
+      - name: club_elo
+      - name: match_info
+      - name: lineups
+      - name: events
+      - name: qualifiers
+      - name: match_summary
 
 # Define models
 models:
@@ -20,4 +25,7 @@ models:
     #     tests:
     #       - unique
     #       - not_null
+
+  - name: fct_player_id
+    description: "Test"
       
