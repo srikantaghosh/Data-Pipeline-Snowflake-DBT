@@ -15,6 +15,8 @@ sources:
       - name: qualifiers
       - name: match_summary
       - name: player_position
+      - name: club_history
+      - name: day_level_club_elo_rank
 
 # Define models
 models:
