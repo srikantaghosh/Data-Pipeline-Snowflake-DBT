@@ -1,3 +1,9 @@
+{{
+  config(
+    materialized = 'table',
+    )
+}}
+
 WITH calculated_events AS (
 SELECT 
     match_id,

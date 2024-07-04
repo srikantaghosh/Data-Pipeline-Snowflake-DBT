@@ -1,3 +1,11 @@
+
+
+{{
+  config(
+    materialized = 'table',
+    )
+}}
+
 WITH summary AS (
 SELECT 
     player_id,
