@@ -8,14 +8,17 @@
 */
 
 --Minutes a player played in each position
-SELECT 
-    player_id,
+SELECT b.global_player_id,
+    b.name,
     position_id,
     SUM(minutes_played) AS total_minutes_played
 FROM 
-    SOCCER.DEV.FCT_MATCH_POSITIONS
+    SOCCER.DEV.FCT_MATCH_POSITIONS a
+    JOIN SOCCER.DEV.FCT_PLAYER b
+    on a.player_id =  b.final_provider_id
 GROUP BY 
-    player_id, position_id;
+    1,2,3;
+
 
 --Position-specific calculations of player stats
     
