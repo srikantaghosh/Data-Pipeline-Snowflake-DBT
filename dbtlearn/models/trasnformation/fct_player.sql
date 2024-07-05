@@ -103,7 +103,7 @@ provider_with_id AS (
         ) AS global_player_id
     FROM deduplicated_provider_data
 )
-
+,provider_final AS (
 SELECT
     global_player_id,
     name,
@@ -113,3 +113,10 @@ SELECT
     provider_id3
 FROM provider_with_id
 ORDER BY global_player_id
+)
+
+SELECT global_player_id,
+    name,
+    dob,
+    COALESCE(provider_id1, provider_id2, provider_id3) AS final_provider_id
+FROM provider_final
