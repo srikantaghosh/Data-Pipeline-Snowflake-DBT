@@ -1,3 +1,5 @@
+## This is a sample data mart table
+
 WITH player AS(
 
 
@@ -8,7 +10,6 @@ SELECT
 ,PROVIDER_ID1
 ,PROVIDER_ID2
 ,PROVIDER_ID3
-
 ,TOTAL_MATCHES
 ,TOTAL_MINUTES_PLAYED
 ,TOTAL_EVENTS
