@@ -1,6 +1,6 @@
 import requests
 import boto3
-from botocore.exceptions import NoCredentialsError, PartialCredentialsError
+from botocore.exceptions import NoCredentialsError, PartialCredentialsError #Specific exceptions related to AWS credentials.
 from datetime import datetime
 
 def fetch_club_elo(date):
@@ -13,7 +13,7 @@ def fetch_club_elo(date):
     try:
         response.raise_for_status()  # Raise an exception for HTTP errors
         data = response.text  # Read the CSV data as text
-    except requests.exceptions.HTTPError as http_err:
+    except requests.exceptions.HTTPError as http_err: ## Halt execution in case of error
         print(f"HTTP error occurred: {http_err}")
         raise
     except requests.exceptions.RequestException as req_err:
@@ -23,7 +23,7 @@ def fetch_club_elo(date):
     return data
 
 def upload_to_s3(data, bucket_name, object_name):
-    s3_client = boto3.client('s3')
+    s3_client = boto3.client('s3') # Creates an S3 client using boto3
     try:
         s3_client.put_object(
             Bucket=bucket_name,
