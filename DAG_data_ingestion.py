@@ -5,16 +5,17 @@ from datetime import datetime
 import requests
 
 def fetch_and_dump_data_to_s3(url, s3_bucket, s3_key):
-    response = requests.get(url)
-    data = response.text
+    response = requests.get(url) #Makes a GET request to the provided URL.
+    data = response.text #Retrieves the response content as a text string (CSV data).
     
-    s3 = S3Hook(aws_conn_id='my_aws_conn')
+    s3 = S3Hook(aws_conn_id='my_aws_conn') #Initialise the connection
+    # Uploads the CSV data as a string to the specified S3 bucket and key.
     s3.load_string(
         string_data=csv_data,
         key=s3_key,
         bucket_name=s3_bucket,
         replace=True
-    )
+    ) 
 
 default_args = {
     'owner': 'airflow',
@@ -34,7 +35,7 @@ with DAG('fetch_and_dump_data', default_args=default_args, schedule_interval='@d
     ]
     
     s3_bucket = 'apc-data-engineering'
-    
+    ## We can create separate dags for each url in prod. 
     for i, url in enumerate(urls):
         task = PythonOperator(
             task_id=f'fetch_and_dump_{i}',
