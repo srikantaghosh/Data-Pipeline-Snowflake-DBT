@@ -19,17 +19,18 @@ FROM
 GROUP BY 
     1,2,3;
 
-
 --Position-specific calculations of player stats
     
 SELECT 
-    player_id,
+    b.global_player_id,
     position_id,
     SUM(total_events) AS total_events,
     SUM(total_qualifiers) AS total_qualifiers,
     SUM(total_variables) AS total_variables
 FROM 
-    SOCCER.DEV.FCT_MATCH_POSITIONS
+    SOCCER.DEV.FCT_MATCH_POSITIONS a
+JOIN SOCCER.DEV.FCT_PLAYER b
+    on a.player_id =  b.final_provider_id
 LEFT JOIN 
     SOCCER.DEV.FCT_EVENTS 
     USING (match_id, team_id, player_id, position_id)
@@ -37,11 +38,11 @@ LEFT JOIN
     SOCCER.DEV.FCT_SUMMARY 
     USING (match_id, team_id, player_id, position_id)
 GROUP BY 
-    player_id, position_id;
+    global_player_id, position_id;
 
 --Player season summaries
 SELECT 
-    player_id,
+    b.global_player_id,
     team_id,
     total_matches,
     total_minutes_played,
@@ -49,21 +50,26 @@ SELECT
     total_qualifiers,
     total_variables
 FROM 
-    SOCCER.DEV.FCT_SEASON_SUMMARY;
+    SOCCER.DEV.FCT_SEASON_SUMMARY a
+    JOIN SOCCER.DEV.FCT_PLAYER b
+    on a.player_id =  b.final_provider_id
+    ;
 
 --Player match summaries
 SELECT 
-    player_id,
+    b.global_player_id,
     match_id,
     SUM(total_events) AS total_events,
     SUM(total_qualifiers) AS total_qualifiers,
     SUM(total_variables) AS total_variables
 FROM 
-    SOCCER.DEV.FCT_EVENTS
+    SOCCER.DEV.FCT_EVENTS a
 LEFT JOIN 
     SOCCER.DEV.FCT_SUMMARY  USING (match_id, team_id, player_id, position_id)
+JOIN SOCCER.DEV.FCT_PLAYER b
+    on a.player_id =  b.final_provider_id
 GROUP BY 
-    player_id, match_id;
+    global_player_id, match_id;
 
 
 --Squads selected
@@ -75,3 +81,7 @@ FROM
     SOCCER.DEV.STG_LINEUPS
 GROUP BY 
     match_id, team_id;
+
+
+
+
