@@ -70,4 +70,9 @@ models:
 
   - name: fct_player_id
     description: "global player_id table which helps in unique dentification"
+    columns:
+      - name: global_player_id
+        tests:
+          - unique
+          - not_null
       
