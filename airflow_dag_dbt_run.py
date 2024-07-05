@@ -1,19 +1,10 @@
 -- THIS IS THE CODE STRUCTURE AND MIGHT NOT BE FULLY ACCURATE
 
 from airflow import DAG
-from airflow.operators.bash_operator import BashOperator
+from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
-from datetime import datetime
-
-# Default arguments for the DAG
-default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'email_on_failure': False,
-    'email_on_retry': False,
-    'retries': 1,
-    'retry_delay': timedelta(minutes=5),
-}
+from datetime import datetime, timedelta
+from git import Repo 
 
 # Define the DAG
 dag = DAG(
@@ -24,6 +15,26 @@ dag = DAG(
     start_date=days_ago(1),
     catchup=False,
 )
+
+# Function to run dbt command
+def run_dbt_task(task_name, git_repo):
+    import subprocess
+    import os
+    
+    # Clone the dbt project from Git repository
+    project_path = '/tmp/dbt_project'  # Temporary directory for cloning
+    if os.path.exists(project_path):
+        repo = Repo(project_path)
+        origin = repo.remotes.origin
+        origin.pull()
+    else:
+        Repo.clone_from(git_repo, project_path)
+    
+    dbt_command = f'dbt run --models {task_name}'
+    
+    # Change directory to dbt project and execute dbt command
+    os.chdir(project_path)
+    subprocess.run(dbt_command, shell=True)
 
 # Define tasks
 staging_tasks = [
@@ -41,22 +52,28 @@ transformation_tasks = [
     'fct_match_positions',
 ]
 
-# dbt run command for staging tasks
+# Git repository URL for dbt project
+git_repo = 'https://github.com/dbtlearn/dbt_project.git'
+
+# Create PythonOperator tasks for staging tasks
 for task in staging_tasks:
-    run_staging = BashOperator(
+    run_staging = PythonOperator(
         task_id=f'run_{task}',
-        bash_command=f'cd /path/to/your/dbt/project && dbt run --models {task}',
+        python_callable=run_dbt_task,
+        op_args=[task, git_repo],
         dag=dag,
     )
 
-# dbt run command for transformation tasks
+# Create PythonOperator tasks for transformation tasks
 for task in transformation_tasks:
-    run_transformation = BashOperator(
+    run_transformation = PythonOperator(
         task_id=f'run_{task}',
-        bash_command=f'cd /path/to/your/dbt/project && dbt run --models {task}',
+        python_callable=run_dbt_task,
+        op_args=[task, git_repo],
         dag=dag,
     )
 
 # Define dependencies
-for i in range(1, len(staging_tasks)):
-    staging_tasks[i] >> run_transformation
+for staging_task in staging_tasks:
+    for transformation_task in transformation_tasks:
+        globals()[staging_task] >> globals()[f'run_{transformation_task}']
