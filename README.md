@@ -11,6 +11,8 @@ Data Pipeline using S3, Snowflake, dbt, Airflow, Python.
 5. dbt
 6. Airflow - WIP
 
+### Architecture
+![Architecture](https://github.com/srikantaghosh/Data-Pipeline-Snowflake-DBT/blob/main/DATA%20PIPELINE.png)
 
 
 ### Objective: Building a Robust Data Architecture for Soccer Clubs The architecture should be able to cover the following requirements:
@@ -41,5 +43,4 @@ NOTE: Sample codes for Data Ingestions, Demo DAGs and Snowflake Queries are stor
 
 For dbt model, please visit- dbtlearn-models
 
-### Architecture
-![Architecture](https://github.com/srikantaghosh/Data-Pipeline-Snowflake-DBT/blob/main/DATA%20PIPELINE.png)
+
